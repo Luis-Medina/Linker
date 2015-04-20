@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="Theme.MyTheme" parent="Theme.Base">
+        <!-- Customize your theme here. -->
+        <item name="android:navigationBarColor">?colorPrimaryDark</item>
+    </style>
+
+</resources>

@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Linker</string>
+    <string name="title_activity_main">Linker</string>
+    <string name="title_activity_link">LinkActivity</string>
+    <string name="lbl_host_name">Host:</string>
+    <string name="host_name">255.255.255.255</string>
+    <string name="btn_search">Connect</string>
+    <string name="btn_search_cancel">Cancel</string>
+    <string name="txt_general_prefs">General</string>
+    <string name="pref_key_general_settings">pref_key_general_settings</string>
+    <string name="pref_key_server">pref_key_server</string>
+    <string name="lbl_status">Status:</string>
+    <string name="lbl_disconnected_status">Not Connected</string>
+    <string name="lbl_connected_status">Connected</string>
+    <string name="txt_message">Large Text</string>
+    <string name="btn_setup">Setup</string>
+    <string name="ip_text">(255.255.255.255)</string>
+</resources>

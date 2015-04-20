@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <color name="PrimaryBackgroundColor">@color/app_color</color>
+    <color name="SecondaryBackgroundColor">@color/md_blue_700</color>
+    <color name="BackgroundAccentColor">@color/md_pink_500</color>
+    <color name="BackgroundAccentColorLight">@color/md_pink_100</color>
+    <color name="BackgroundColor">@color/md_white_1000</color>
+    <color name="PrimaryTextColor">@color/md_white_1000</color>
+    <color name="SecondaryTextColor">@color/md_yellow_500</color>
+    <color name="appTopBarBackgroundColor">@color/md_grey_300</color>
+</resources>

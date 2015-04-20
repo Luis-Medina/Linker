@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:id="@+id/frame_layout">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="269dp"
+        android:layout_height="165dp"
+        android:layout_gravity="center"
+        android:weightSum="1"
+        android:background="@color/bright_foreground_inverse_material_light"
+        style="@style/Base.Theme.AppCompat.Dialog">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/app_name"
+            android:id="@+id/textView"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:textColor="@color/app_color" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/holo_blue_light"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:text="@string/txt_message"
+            android:id="@+id/txt_message"
+            android:layout_weight="0.85"
+            android:gravity="center"
+            android:textColor="@color/abc_primary_text_material_light" />
+
+        <Button
+            android:layout_width="102dp"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_setup"
+            android:id="@+id/btn_setup"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
+
+</FrameLayout>
