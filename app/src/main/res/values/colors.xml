@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <color name="PrimaryBackgroundColor">@color/app_color</color>
+    <color name="PrimaryBackgroundColor">@color/md_blue_500</color>
     <color name="SecondaryBackgroundColor">@color/md_blue_700</color>
     <color name="BackgroundAccentColor">@color/md_pink_500</color>
     <color name="BackgroundAccentColorLight">@color/md_pink_100</color>
