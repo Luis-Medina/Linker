@@ -16,9 +16,6 @@ class PortSniffer(private val ipAddress: String) {
 
     @Throws(Exception::class)
     fun call(scope: CoroutineScope): ServerData? {
-        var port = -1
-        var hostName = ipAddress
-
         loop@ for (i in portStart..portEnd) {
             scope.ensureActive()
             val socket = Socket()
@@ -34,13 +31,13 @@ class PortSniffer(private val ipAddress: String) {
                 socket.getInputStream().bufferedReader().use {
                     val packetReceived = gson.fromJson(it, NetworkPacket::class.java)
                     if (packetReceived.getType() == NetworkPacket.TYPE.SERVER_HELLO) {
-                        port = i
-                        try {
+                        val hostName = try {
                             val inetAddress = InetAddress.getByName(ipAddress)
-                            hostName = inetAddress.canonicalHostName
+                            inetAddress.canonicalHostName
                         } catch (e: Exception) {
+                            ipAddress
                         }
-                        return ServerData(ipAddress, port, hostName)
+                        return ServerData(ipAddress, i, hostName)
                     }
                 }
             } catch (ex: Exception) {
