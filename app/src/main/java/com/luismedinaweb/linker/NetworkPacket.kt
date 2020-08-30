@@ -5,7 +5,6 @@ import java.io.Serializable
 /**
  * Created by luiso on 4/1/2017.
  */
-
 class NetworkPacket(private val mType: TYPE?, val content: String?) : Serializable {
 
     val isValid: Boolean
