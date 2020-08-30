@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
 import java.io.OutputStream
 import java.net.InetSocketAddress
@@ -56,36 +55,31 @@ class MainActivityViewModel : ViewModel() {
             searchScope.cancel()
             _searchStatus.postValue(SearchStatus.Cancelled)
         } else {
-            viewModelScope.launch {
-                _searchStatus.postValue(SearchStatus.Searching("Searching for server"))
-                var result: ServerData? = null
-                CoroutineScope(Dispatchers.Default).launch {
-                    val parentJob = SupervisorJob()
-                    val nodes = getNodes(wm)
-                    val jobs = nodes.map { SupervisorJob(parentJob) }
-                    searchScope = CoroutineScope(Dispatchers.IO + parentJob)
-                    searchScope.launch {
-                        nodes.forEachIndexed { index, ipAddress ->
-                            ensureActive()
-                            val childJob = jobs[index]
-                            CoroutineScope(childJob).launch {
-                                val callable = PortSniffer(ipAddress)
-                                val serverData = callable.call(this)
-                                if (serverData != null) {
-                                    println("Found server at $serverData")
-                                    result = serverData
-                                    PrefHelper.serverData = serverData
-                                    searchScope.cancel()
-                                } else {
-                                    println("Server not found at $ipAddress")
-                                }
-                                childJob.complete()
+            _searchStatus.postValue(SearchStatus.Searching("Searching for server"))
+            var result: ServerData? = null
+            CoroutineScope(Dispatchers.Default).launch {
+                val parentJob = SupervisorJob()
+                val nodes = getNodes(wm)
+                val jobs = nodes.map { SupervisorJob(parentJob) }
+                searchScope = CoroutineScope(Dispatchers.IO + parentJob)
+                searchScope.launch {
+                    nodes.forEachIndexed { index, ipAddress ->
+                        ensureActive()
+                        val childJob = jobs[index]
+                        CoroutineScope(childJob).launch {
+                            val callable = PortSniffer(ipAddress)
+                            val serverData = callable.call(this)
+                            if (serverData != null) {
+                                result = serverData
+                                PrefHelper.serverData = serverData
+                                searchScope.cancel()
                             }
+                            childJob.complete()
                         }
                     }
-                    jobs.joinAll()
-                    _searchStatus.postValue(SearchStatus.Finished(result))
                 }
+                jobs.joinAll()
+                _searchStatus.postValue(SearchStatus.Finished(result))
             }
         }
     }
@@ -119,5 +113,10 @@ class MainActivityViewModel : ViewModel() {
         }
 
         return ipList
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        searchScope.cancel()
     }
 }
