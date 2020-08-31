@@ -1,3 +1,3 @@
 package com.luismedinaweb.linker
 
-data class ServerData(val ipAddress: String, val port: Int, val serverName: String)
+data class ServerData(val ipAddress: String, val port: Int)

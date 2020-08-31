@@ -1,17 +1,12 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-    </style>
-
-    <style name="Theme.Transparent" parent="AppTheme">
+    <style name="Theme.Transparent" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
-    <style name="Theme.Base" parent="AppTheme">
+    <style name="Theme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/PrimaryBackgroundColor</item>
         <item name="colorPrimaryDark">@color/SecondaryBackgroundColor</item>
         <item name="colorAccent">@color/BackgroundAccentColor</item>

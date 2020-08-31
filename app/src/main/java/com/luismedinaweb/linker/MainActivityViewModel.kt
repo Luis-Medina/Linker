@@ -1,5 +1,6 @@
 package com.luismedinaweb.linker
 
+import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -50,7 +51,7 @@ class MainActivityViewModel : ViewModel() {
         }
     }
 
-    fun searchForServer(wm: WifiManager?) {
+    fun searchForServer(wm: WifiManager?, connectivityManager: ConnectivityManager?) {
         if (_searchStatus.value is SearchStatus.Searching) {
             searchScope.cancel()
             _searchStatus.postValue(SearchStatus.Cancelled)
@@ -67,7 +68,7 @@ class MainActivityViewModel : ViewModel() {
                         ensureActive()
                         val childJob = jobs[index]
                         CoroutineScope(childJob).launch {
-                            val callable = PortSniffer(ipAddress)
+                            val callable = PortSniffer(ipAddress, connectivityManager)
                             val serverData = callable.call(this)
                             if (serverData != null) {
                                 result = serverData

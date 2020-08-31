@@ -3,6 +3,7 @@ package com.luismedinaweb.linker
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.view.View
@@ -19,7 +20,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var searchButton: Button
     private lateinit var progressText: TextView
     private lateinit var serverNameText: TextView
-    private lateinit var ipText: TextView
     private lateinit var statusText: TextView
     private val model: MainActivityViewModel by viewModels()
 
@@ -46,12 +46,14 @@ class MainActivity : AppCompatActivity() {
         progressText = findViewById<View>(R.id.progressText) as TextView
         serverNameText = findViewById<View>(R.id.host_name) as TextView
         statusText = findViewById<View>(R.id.lbl_connection_status) as TextView
-        ipText = findViewById<View>(R.id.ipText) as TextView
     }
 
     private fun setupListeners() {
         searchButton.setOnClickListener {
-            model.searchForServer(applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager)
+            model.searchForServer(
+                    applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager,
+                    applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+            )
         }
     }
 
@@ -93,11 +95,8 @@ class MainActivity : AppCompatActivity() {
         if (PrefHelper.hasValidServer()) {
             statusText.setText(R.string.lbl_connected_status)
             statusText.setTextColor(Color.rgb(4, 141, 4))
-            ipText.text = PrefHelper.serverData?.ipAddress
-            ipText.visibility = TextView.VISIBLE
-            serverNameText.text = PrefHelper.serverData?.serverName
+            serverNameText.text = PrefHelper.serverData?.ipAddress
         } else {
-            ipText.visibility = TextView.INVISIBLE
             statusText.setText(R.string.lbl_disconnected_status)
             statusText.setTextColor(Color.RED)
         }

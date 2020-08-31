@@ -1,10 +1,10 @@
 package com.luismedinaweb.linker
 
+import android.net.ConnectivityManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ensureActive
 import java.io.OutputStream
 import java.net.ConnectException
-import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.Socket
 
@@ -12,7 +12,7 @@ import java.net.Socket
 /**
  * Created by Luis on 4/11/2015.
  */
-class PortSniffer(private val ipAddress: String) {
+class PortSniffer(private val ipAddress: String, private val connectivityManager: ConnectivityManager?) {
 
     @Throws(Exception::class)
     fun call(scope: CoroutineScope): ServerData? {
@@ -28,16 +28,10 @@ class PortSniffer(private val ipAddress: String) {
                 // Say hello to server
                 out.sayHello()
 
-                socket.getInputStream().bufferedReader().use {
-                    val packetReceived = gson.fromJson(it, NetworkPacket::class.java)
+                socket.getInputStream().bufferedReader().use { reader ->
+                    val packetReceived = gson.fromJson(reader, NetworkPacket::class.java)
                     if (packetReceived.getType() == NetworkPacket.TYPE.SERVER_HELLO) {
-                        val hostName = try {
-                            val inetAddress = InetAddress.getByName(ipAddress)
-                            inetAddress.canonicalHostName
-                        } catch (e: Exception) {
-                            ipAddress
-                        }
-                        return ServerData(ipAddress, i, hostName)
+                        return ServerData(ipAddress, i)
                     }
                 }
             } catch (ex: Exception) {
