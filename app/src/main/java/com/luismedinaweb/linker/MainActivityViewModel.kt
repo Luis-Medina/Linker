@@ -6,16 +6,17 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.luismedinaweb.LinkerPacket
 import kotlinx.coroutines.*
-import java.io.OutputStream
 import java.net.InetSocketAddress
 import java.net.Socket
 
 class MainActivityViewModel : ViewModel() {
 
     private val _searchStatus: MutableLiveData<SearchStatus> = MutableLiveData(SearchStatus.NotStarted)
+    private var searchScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
+
     val searchStatus: LiveData<SearchStatus> = _searchStatus
-    private lateinit var searchScope: CoroutineScope
 
     init {
         verifyServer()
@@ -24,28 +25,23 @@ class MainActivityViewModel : ViewModel() {
     private fun verifyServer() {
         val serverData: ServerData = PrefHelper.serverData ?: return
 
-        searchScope = CoroutineScope(Dispatchers.IO)
         searchScope.launch {
             val socket = Socket()
-            var out: OutputStream? = null
             var result = false
             try {
-                val address = InetSocketAddress(serverData.ipAddress, serverData.port)
-                socket.connect(address, 1000)
-                out = socket.getOutputStream()
+                socket.use {
+                    val address = InetSocketAddress(serverData.ipAddress, serverData.port)
+                    it.connect(address, 1000)
 
-                // Say hello to server
-                out.sayHello()
+                    // Say hello to server
+                    it.getOutputStream().sayHello()
 
-                // Read server response
-                result = socket.getInputStream().bufferedReader().use {
-                    val response = gson.fromJson(it, NetworkPacket::class.java)
-                    response.getType() == NetworkPacket.TYPE.SERVER_HELLO
+                    // Read server response
+                    val response = gson.fromJson(it.getInputStream().bufferedReader(), LinkerPacket::class.java)
+                    result = response.type == LinkerPacket.SERVERHELLO
                 }
             } catch (ex: Exception) {
                 Log.e(this::class.java.simpleName, "" + ex.message)
-            } finally {
-                cleanup(socket, out)
             }
             _searchStatus.postValue(SearchStatus.Finished(if (result) PrefHelper.serverData else null))
         }

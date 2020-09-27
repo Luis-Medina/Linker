@@ -9,8 +9,8 @@ android {
         applicationId "com.luismedinaweb.linker"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 3
-        versionName "1.2"
+        versionCode 4
+        versionName "1.4"
     }
     buildTypes {
         release {
@@ -28,6 +28,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.luismedinaweb:LinkerProtocol:1.4'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlin_version}"
@@ -39,4 +40,7 @@ dependencies {
 }
 repositories {
     mavenCentral()
+    maven {
+        url = uri("C:/Users/luiso/.m2/repository")
+    }
 }
